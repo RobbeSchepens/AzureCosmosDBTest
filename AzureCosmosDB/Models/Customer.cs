@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace AzureCosmosDB.Models
 {
-    public class Customer : Entity
+    public class Customer
     {
         [JsonPropertyName("firstName")]
         public string FirstName { get; set; }

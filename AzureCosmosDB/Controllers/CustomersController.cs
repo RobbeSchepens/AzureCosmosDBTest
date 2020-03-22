@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using AzureCosmosDB.Interfaces;
 using AzureCosmosDB.Models;
 using AzureCosmosDB.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -12,13 +11,6 @@ namespace AzureCosmosDB.Controllers
     [Route("api/[controller]")]
     public class CustomersController : ControllerBase
     {
-        private readonly ICustomerRepository _repo;
-
-        public CustomersController(ICustomerRepository repo)
-        {
-            _repo = repo;
-        }
-
         // GET: api/Customers
         [HttpGet]
         public async Task<IEnumerable<Customer>> Get()

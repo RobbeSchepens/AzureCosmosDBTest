@@ -4,8 +4,11 @@ using System.Text.Json.Serialization;
 
 namespace AzureCosmosDB.Models
 {
-    public class Invoice : Entity
+    public class Invoice
     {
+        [JsonPropertyName("id")]
+        public Guid Id { get; set; }
+
         [JsonPropertyName("createdOn")]
         public DateTime CreatedOn { get; set; }
 
