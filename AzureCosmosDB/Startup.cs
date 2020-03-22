@@ -1,15 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using AzureCosmosDB.Models;
+using AzureCosmosDB.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace AzureCosmosDB
 {
@@ -46,6 +41,11 @@ namespace AzureCosmosDB
             {
                 endpoints.MapControllers();
             });
+
+            DocumentDBRepository<Customer>.Initialize();
+            DocumentDBRepository<ContactInfo>.Initialize();
+            DocumentDBRepository<Invoice>.Initialize();
+            DocumentDBRepository<InvoiceLine>.Initialize();
         }
     }
 }
