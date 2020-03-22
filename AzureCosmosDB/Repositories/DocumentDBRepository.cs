@@ -13,8 +13,8 @@ namespace AzureCosmosDB.Repositories
     {
         private const string endpoint = "https://localhost:8081";
         private const string key = "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==";
-        private const string databaseId = "DOCUMENTDBDATABASEID";
-        private const string collectionId = "DOCUMENTDBCOLLECTIONID";
+        private const string databaseId = "AzureCosmosDBTest";
+        private const string collectionId = "Invoices";
         private static DocumentClient client;
 
         public static async Task<T> GetItemAsync(string id)
