@@ -1,3 +1,5 @@
+using AzureCosmosDB.Data;
+using AzureCosmosDB.Interfaces;
 using AzureCosmosDB.Models;
 using AzureCosmosDB.Repositories;
 using Microsoft.AspNetCore.Builder;
@@ -21,6 +23,9 @@ namespace AzureCosmosDB
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddScoped<IInvoiceRepository, InvoiceRepository>();
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,10 +47,10 @@ namespace AzureCosmosDB
                 endpoints.MapControllers();
             });
 
-            DocumentDBRepository<Customer>.Initialize("Customers");
-            DocumentDBRepository<ContactInfo>.Initialize("Customers");
-            DocumentDBRepository<Invoice>.Initialize("Invoices");
-            DocumentDBRepository<InvoiceLine>.Initialize("Invoices");
+            //DocumentDBRepository<Customer>.Initialize("Customers");
+            //DocumentDBRepository<ContactInfo>.Initialize("Customers");
+            //DocumentDBRepository<Invoice>.Initialize("Invoices");
+            //DocumentDBRepository<InvoiceLine>.Initialize("Invoices");
         }
     }
 }
