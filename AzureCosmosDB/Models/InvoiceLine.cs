@@ -4,9 +4,6 @@ namespace AzureCosmosDB.Models
 {
     public class InvoiceLine
     {
-        [JsonPropertyName("invoiceId")]
-        public int InvoiceId { get; set; }
-
         [JsonPropertyName("quantity")]
         public int Quantity { get; set; }
 

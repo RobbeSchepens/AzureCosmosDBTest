@@ -6,10 +6,13 @@ namespace AzureCosmosDB.Models
 {
     public class Invoice
     {
+        [JsonPropertyName("id")]
+        public Guid Id { get; set; }
+
         [JsonPropertyName("createdOn")]
         public DateTime CreatedOn { get; set; }
 
-        public virtual Customer Customer { get; set; }
+        //public virtual Customer Customer { get; set; }
 
         [JsonPropertyName("customerId")]
         public int CustomerId { get; set; }
@@ -17,7 +20,8 @@ namespace AzureCosmosDB.Models
         [JsonPropertyName("description")]
         public string Description { get; set; }
 
-        public virtual ICollection<InvoiceLine> InvoiceLines { get; set; }
+        [JsonPropertyName("invoiceLines")]
+        public ICollection<InvoiceLine> InvoiceLines { get; set; }
 
         [JsonPropertyName("isCompleted")]
         public bool IsCompleted { get; set; }
