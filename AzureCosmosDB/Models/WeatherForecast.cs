@@ -1,6 +1,6 @@
 using System;
 
-namespace AzureCosmosDB
+namespace AzureCosmosDB.Models
 {
     public class WeatherForecast
     {
