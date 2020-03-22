@@ -14,7 +14,7 @@ namespace AzureCosmosDB.Repositories
         private const string endpoint = "https://localhost:8081";
         private const string key = "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==";
         private const string databaseId = "AzureCosmosDBTest";
-        private const string collectionId = "Invoices";
+        private static string collectionId;
         private static DocumentClient client;
 
         public static async Task<T> GetItemAsync(string id)
@@ -69,11 +69,11 @@ namespace AzureCosmosDB.Repositories
             await client.DeleteDocumentAsync(UriFactory.CreateDocumentUri(databaseId, collectionId, id));
         }
 
-        public static void Initialize()
+        public static void Initialize(string collectionName)
         {
             client = new DocumentClient(new Uri(endpoint), key);
             CreateDatabaseIfNotExistsAsync().Wait();
-            CreateCollectionIfNotExistsAsync().Wait();
+            CreateCollectionIfNotExistsAsync(collectionName).Wait();
         }
 
         private static async Task CreateDatabaseIfNotExistsAsync()
@@ -95,11 +95,13 @@ namespace AzureCosmosDB.Repositories
             }
         }
 
-        private static async Task CreateCollectionIfNotExistsAsync()
+        private static async Task CreateCollectionIfNotExistsAsync(string collectionName)
         {
+            collectionId = collectionName;
+
             try
             {
-                await client.ReadDocumentCollectionAsync(UriFactory.CreateDocumentCollectionUri(databaseId, collectionId));
+                await client.ReadDocumentCollectionAsync(UriFactory.CreateDocumentCollectionUri(databaseId, collectionName));
             }
             catch (DocumentClientException e)
             {
@@ -107,7 +109,7 @@ namespace AzureCosmosDB.Repositories
                 {
                     await client.CreateDocumentCollectionAsync(
                         UriFactory.CreateDatabaseUri(databaseId),
-                        new DocumentCollection { Id = collectionId },
+                        new DocumentCollection { Id = collectionName },
                         new RequestOptions { OfferThroughput = 1000 });
                 }
                 else
