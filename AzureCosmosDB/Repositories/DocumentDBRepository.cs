@@ -37,12 +37,11 @@ namespace AzureCosmosDB.Repositories
             }
         }
 
-        public static async Task<IEnumerable<T>> GetItemsAsync(Expression<Func<T, bool>> predicate)
+        public static async Task<IEnumerable<T>> GetItemsAsync()
         {
             var query = client.CreateDocumentQuery<T>(
                 UriFactory.CreateDocumentCollectionUri(databaseId, collectionId),
                 new FeedOptions { MaxItemCount = -1 })
-                .Where(predicate)
                 .AsDocumentQuery();
 
             var results = new List<T>();
