@@ -42,8 +42,8 @@ namespace AzureCosmosDB
                 endpoints.MapControllers();
             });
 
-            DocumentDBRepository<Customer>.Initialize("Customers");
-            DocumentDBRepository<Invoice>.Initialize("Invoices");
+            DocumentDBRepository<Customer>.Initialize("Customer");
+            DocumentDBRepository<Invoice>.Initialize("Invoice");
         }
     }
 }
