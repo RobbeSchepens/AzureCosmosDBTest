@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AzureCosmosDB.Models;
 using AzureCosmosDB.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.Documents;
 
 namespace AzureCosmosDB.Controllers
 {
@@ -27,19 +28,20 @@ namespace AzureCosmosDB.Controllers
 
         // POST: api/Customers
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<Document> Post([FromBody] Customer post)
         {
+            return await DocumentDBRepository<Customer>.CreateItemAsync(post);
         }
 
         // PUT: api/Customers/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public void Put(Guid id, [FromBody] Customer put)
         {
         }
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public void Delete(Guid id)
         {
         }
     }

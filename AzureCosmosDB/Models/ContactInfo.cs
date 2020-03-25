@@ -13,9 +13,6 @@ namespace AzureCosmosDB.Models
         [JsonPropertyName("contactTypeId")]
         public int ContactTypeId { get; set; }
 
-        [JsonPropertyName("customerId")]
-        public int CustomerId { get; set; }
-
         [JsonPropertyName("value")]
         public string Value { get; set; }
     }
