@@ -43,9 +43,7 @@ namespace AzureCosmosDB
             });
 
             DocumentDBRepository<Customer>.Initialize("Customers");
-            DocumentDBRepository<ContactInfo>.Initialize("Customers");
             DocumentDBRepository<Invoice>.Initialize("Invoices");
-            DocumentDBRepository<InvoiceLine>.Initialize("Invoices");
         }
     }
 }
