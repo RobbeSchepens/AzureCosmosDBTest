@@ -75,6 +75,10 @@ with JSON text body:
 
 DELETE `https://localhost:44314/api/Invoices/cf8be6e0-6b54-4831-8c1b-65cae194aa16`
 
+### Set Invoice as completed
+
+PUT `https://localhost:44314/api/Invoices/CompleteInvoice/cf8be6e0-6b54-4831-8c1b-65cae194aa16`
+
 ### POST Customer
 
 POST `https://localhost:44314/api/Customers`
