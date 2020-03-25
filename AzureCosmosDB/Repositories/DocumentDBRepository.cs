@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AzureCosmosDB.Models.Interfaces;
 using Microsoft.Azure.Documents;
@@ -10,15 +8,22 @@ using Microsoft.Azure.Documents.Linq;
 
 namespace AzureCosmosDB.Repositories
 {
-    public static class DocumentDBRepository<T> where T : class, IEntity
+    public class DocumentDBRepository<T> where T : class, IEntity
     {
         private const string endpoint = "https://localhost:8081";
         private const string key = "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==";
         private const string databaseId = "AzureCosmosDBTest";
-        private static string collectionId;
+        private static readonly string collectionId = typeof(T).Name;
         private static DocumentClient client;
 
-        public static async Task<T> GetItemAsync(string id)
+        public DocumentDBRepository()
+        {
+            client = new DocumentClient(new Uri(endpoint), key);
+            CreateDatabaseIfNotExistsAsync().Wait();
+            CreateCollectionIfNotExistsAsync().Wait();
+        }
+
+        public async Task<T> GetItemAsync(string id)
         {
             try
             {
@@ -38,7 +43,7 @@ namespace AzureCosmosDB.Repositories
             }
         }
 
-        public static async Task<IEnumerable<T>> GetItemsAsync()
+        public async Task<IEnumerable<T>> GetItemsAsync()
         {
             var query = client.CreateDocumentQuery<T>(
                 UriFactory.CreateDocumentCollectionUri(databaseId, collectionId),
@@ -54,30 +59,23 @@ namespace AzureCosmosDB.Repositories
             return results;
         }
 
-        public static async Task<Document> CreateItemAsync(T item)
+        public async Task<Document> CreateItemAsync(T item)
         {
             item.Id = Guid.NewGuid();
             return await client.CreateDocumentAsync(UriFactory.CreateDocumentCollectionUri(databaseId, collectionId), item);
         }
 
-        public static async Task<Document> UpdateItemAsync(string id, T item)
+        public async Task<Document> UpdateItemAsync(string id, T item)
         {
             return await client.ReplaceDocumentAsync(UriFactory.CreateDocumentUri(databaseId, collectionId, id), item, new RequestOptions { PartitionKey = new PartitionKey(id) });
         }
 
-        public static async Task DeleteItemAsync(string id)
+        public async Task DeleteItemAsync(string id)
         {
             await client.DeleteDocumentAsync(UriFactory.CreateDocumentUri(databaseId, collectionId, id), new RequestOptions { PartitionKey = new PartitionKey(id) });
         }
 
-        public static void Initialize(string collectionName)
-        {
-            client = new DocumentClient(new Uri(endpoint), key);
-            CreateDatabaseIfNotExistsAsync().Wait();
-            CreateCollectionIfNotExistsAsync(collectionName).Wait();
-        }
-
-        private static async Task CreateDatabaseIfNotExistsAsync()
+        private async Task CreateDatabaseIfNotExistsAsync()
         {
             try
             {
@@ -96,13 +94,11 @@ namespace AzureCosmosDB.Repositories
             }
         }
 
-        private static async Task CreateCollectionIfNotExistsAsync(string collectionName)
+        private async Task CreateCollectionIfNotExistsAsync()
         {
-            collectionId = collectionName;
-
             try
             {
-                await client.ReadDocumentCollectionAsync(UriFactory.CreateDocumentCollectionUri(databaseId, collectionName));
+                await client.ReadDocumentCollectionAsync(UriFactory.CreateDocumentCollectionUri(databaseId, collectionId));
             }
             catch (DocumentClientException e)
             {
@@ -110,7 +106,7 @@ namespace AzureCosmosDB.Repositories
                 {
                     await client.CreateDocumentCollectionAsync(
                         UriFactory.CreateDatabaseUri(databaseId),
-                        new DocumentCollection { Id = collectionName },
+                        new DocumentCollection { Id = collectionId },
                         new RequestOptions { OfferThroughput = 1000 });
                 }
                 else

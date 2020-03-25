@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using AzureCosmosDB.Models;
-using AzureCosmosDB.Repositories;
+using AzureCosmosDB.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Documents;
 
@@ -11,48 +10,55 @@ namespace AzureCosmosDB.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class InvoicesController : ControllerBase
+    public class InvoicesController : BaseController<Invoice>
     {
+        private readonly IRepositoryInvoice repository;
+
+        public InvoicesController(IRepositoryInvoice repository) : base(repository)
+        {
+            this.repository = repository;
+        }
+
         // GET: api/Invoices
         [HttpGet]
-        public async Task<IEnumerable<Invoice>> Get()
+        public new async Task<IEnumerable<Invoice>> Get()
         {
-            return await DocumentDBRepository<Invoice>.GetItemsAsync();
+            return await base.Get();
         }
 
         // GET: api/Invoices/5
         [HttpGet("{id}", Name = "GetInvoice")]
-        public async Task<Invoice> Get(Guid id)
+        public new async Task<Invoice> Get(Guid id)
         {
-            return await DocumentDBRepository<Invoice>.GetItemAsync(id.ToString());
+            return await base.Get(id);
         }
 
         // POST: api/Invoices
         [HttpPost]
-        public async Task<Document> Post([FromBody] Invoice post)
+        public new async Task<Document> Post([FromBody] Invoice post)
         {
-            return await DocumentDBRepository<Invoice>.CreateItemAsync(post);
+            return await base.Post(post);
         }
 
         // PUT: api/Invoices/5
         [HttpPut("{id}")]
-        public async Task<Document> Put(Guid id, [FromBody] Invoice put)
+        public new async Task<Document> Put(Guid id, [FromBody] Invoice put)
         {
-            return await DocumentDBRepository<Invoice>.UpdateItemAsync(id.ToString(), put);
+            return await base.Put(id, put);
         }
 
-        // DELETE: api/ApiWithActions/5
+        // DELETE: api/Invoices/5
         [HttpDelete("{id}")]
-        public async Task Delete(Guid id)
+        public new async Task Delete(Guid id)
         {
-            await DocumentDBRepository<Invoice>.DeleteItemAsync(id.ToString());
+            await base.Delete(id);
         }
 
         // PUT: api/Invoices/CompleteInvoice/5
         [HttpPut("CompleteInvoice/{id}")]
         public async Task<Document> CompleteInvoice(Guid id)
         {
-            var invoiceToComplete = await DocumentDBRepository<Invoice>.GetItemAsync(id.ToString());
+            var invoiceToComplete = await repository.GetItemAsync(id.ToString());
 
             if (invoiceToComplete.IsCompleted)
             {
@@ -63,7 +69,7 @@ namespace AzureCosmosDB.Controllers
             }
 
             invoiceToComplete.IsCompleted = true;
-            return await DocumentDBRepository<Invoice>.UpdateItemAsync(id.ToString(), invoiceToComplete);
+            return await repository.UpdateItemAsync(id.ToString(), invoiceToComplete);
         }
     }
 }
