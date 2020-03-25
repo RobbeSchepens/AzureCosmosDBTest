@@ -21,8 +21,8 @@ namespace AzureCosmosDB
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddScoped(typeof(IRepositoryInvoice), typeof(RepositoryInvoice));
-            services.AddScoped(typeof(IRepositoryCustomer), typeof(RepositoryCustomer));
+            services.AddSingleton(typeof(IRepositoryInvoice), typeof(RepositoryInvoice));
+            services.AddSingleton(typeof(IRepositoryCustomer), typeof(RepositoryCustomer));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
