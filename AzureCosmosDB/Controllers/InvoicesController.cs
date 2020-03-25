@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using AzureCosmosDB.Models;
 using AzureCosmosDB.Repositories;
@@ -45,6 +46,24 @@ namespace AzureCosmosDB.Controllers
         public async Task Delete(Guid id)
         {
             await DocumentDBRepository<Invoice>.DeleteItemAsync(id.ToString());
+        }
+
+        // PUT: api/Invoices/CompleteInvoice/5
+        [HttpPut("CompleteInvoice/{id}")]
+        public async Task<Document> CompleteInvoice(Guid id)
+        {
+            var invoiceToComplete = await DocumentDBRepository<Invoice>.GetItemAsync(id.ToString());
+
+            if (invoiceToComplete.IsCompleted)
+            {
+                this.ModelState.AddModelError(
+                    "IsCompleted",
+                    "This invoices is already been completed.");
+                return null;
+            }
+
+            invoiceToComplete.IsCompleted = true;
+            return await DocumentDBRepository<Invoice>.UpdateItemAsync(id.ToString(), invoiceToComplete);
         }
     }
 }
