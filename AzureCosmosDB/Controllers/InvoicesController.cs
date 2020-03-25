@@ -35,14 +35,16 @@ namespace AzureCosmosDB.Controllers
 
         // PUT: api/Invoices/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string put)
+        public async Task<Document> Put(Guid id, [FromBody] Invoice put)
         {
+            return await DocumentDBRepository<Invoice>.UpdateItemAsync(id.ToString(), put);
         }
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public void Delete(Guid id)
+        public async Task Delete(Guid id)
         {
+            await DocumentDBRepository<Invoice>.DeleteItemAsync(id.ToString());
         }
     }
 }

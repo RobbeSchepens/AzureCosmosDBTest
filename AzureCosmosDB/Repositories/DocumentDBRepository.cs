@@ -21,7 +21,7 @@ namespace AzureCosmosDB.Repositories
         {
             try
             {
-                Document document = await client.ReadDocumentAsync(UriFactory.CreateDocumentUri(databaseId, collectionId, id));
+                Document document = await client.ReadDocumentAsync(UriFactory.CreateDocumentUri(databaseId, collectionId, id), new RequestOptions { PartitionKey = new PartitionKey(id) });
                 return (T)(dynamic)document;
             }
             catch (DocumentClientException e)
@@ -60,12 +60,12 @@ namespace AzureCosmosDB.Repositories
 
         public static async Task<Document> UpdateItemAsync(string id, T item)
         {
-            return await client.ReplaceDocumentAsync(UriFactory.CreateDocumentUri(databaseId, collectionId, id), item);
+            return await client.ReplaceDocumentAsync(UriFactory.CreateDocumentUri(databaseId, collectionId, id), item, new RequestOptions { PartitionKey = new PartitionKey(id) });
         }
 
         public static async Task DeleteItemAsync(string id)
         {
-            await client.DeleteDocumentAsync(UriFactory.CreateDocumentUri(databaseId, collectionId, id));
+            await client.DeleteDocumentAsync(UriFactory.CreateDocumentUri(databaseId, collectionId, id), new RequestOptions { PartitionKey = new PartitionKey(id) });
         }
 
         public static void Initialize(string collectionName)
