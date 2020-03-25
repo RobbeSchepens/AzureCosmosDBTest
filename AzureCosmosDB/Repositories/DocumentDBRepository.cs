@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using AzureCosmosDB.Models.Interfaces;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 using Microsoft.Azure.Documents.Linq;
 
 namespace AzureCosmosDB.Repositories
 {
-    public static class DocumentDBRepository<T> where T : class
+    public static class DocumentDBRepository<T> where T : class, IEntity
     {
         private const string endpoint = "https://localhost:8081";
         private const string key = "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==";
@@ -55,6 +56,7 @@ namespace AzureCosmosDB.Repositories
 
         public static async Task<Document> CreateItemAsync(T item)
         {
+            item.Id = Guid.NewGuid();
             return await client.CreateDocumentAsync(UriFactory.CreateDocumentCollectionUri(databaseId, collectionId), item);
         }
 

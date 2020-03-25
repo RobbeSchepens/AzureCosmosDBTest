@@ -1,24 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
+using AzureCosmosDB.Models.Interfaces;
+using Newtonsoft.Json;
 
 namespace AzureCosmosDB.Models
 {
-    public class Customer
+    public class Customer : IEntity
     {
-        [JsonPropertyName("id")]
+        [JsonProperty(PropertyName = "id")]
         public Guid Id { get; set; }
 
-        [JsonPropertyName("firstName")]
+        [JsonProperty(PropertyName = "firstName")]
         public string FirstName { get; set; }
 
-        [JsonPropertyName("lastName")]
+        [JsonProperty(PropertyName = "lastName")]
         public string LastName { get; set; }
 
-        [JsonPropertyName("address")]
+        [JsonProperty(PropertyName = "address")]
         public string Address { get; set; }
         
-        [JsonPropertyName("contactInfos")]
+        [JsonProperty(PropertyName = "contactInfos")]
         public virtual ICollection<ContactInfo> ContactInfos { get; set; }
     }
 }

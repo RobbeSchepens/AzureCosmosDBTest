@@ -1,16 +1,16 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace AzureCosmosDB.Models
 {
     public class InvoiceLine
     {
-        [JsonPropertyName("quantity")]
+        [JsonProperty(PropertyName = "quantity")]
         public int Quantity { get; set; }
 
-        [JsonPropertyName("total")]
+        [JsonProperty(PropertyName = "total")]
         public decimal Total => Quantity * UnitPrice;
 
-        [JsonPropertyName("unitPrice")]
+        [JsonProperty(PropertyName = "unitPrice")]
         public decimal UnitPrice { get; set; }
     }
 }

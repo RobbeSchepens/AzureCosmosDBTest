@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace AzureCosmosDB.Models
 {
@@ -10,10 +10,10 @@ namespace AzureCosmosDB.Models
 
     public class ContactInfo
     {
-        [JsonPropertyName("contactTypeId")]
+        [JsonProperty(PropertyName = "contactTypeId")]
         public int ContactTypeId { get; set; }
 
-        [JsonPropertyName("value")]
+        [JsonProperty(PropertyName = "value")]
         public string Value { get; set; }
     }
 }
